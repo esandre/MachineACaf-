@@ -36,6 +36,6 @@ public class Machine
         CafésServis++;
         SommeEnCaisse += sommeEnCentimes;
         ConsommationEau = 1;
-        StockGobelets = 0;
+        if (!MugDétecté) StockGobelets = 0;
     }
 }

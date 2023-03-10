@@ -105,7 +105,7 @@ public class MachineACaféTest
         "ETANT DONNE une machine a café manquant d'une Ressource Nécessaire " +
         "QUAND on insère une somme supérieure ou égale à 40cts " +
         "ALORS aucune Ressource Nécessaire n'est consommée " +
-        "ET la somme est rendue", Skip = "Test tautologique")]
+        "ET la somme est rendue")]
     [MemberData(nameof(CasTestPénurie))]
     public void TestPénuriesV2(Ressource ressourceNécessaireManquante)
     {
