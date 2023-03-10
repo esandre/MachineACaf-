@@ -4,5 +4,6 @@ public enum Ressource
 {
     Gobelet,
     Café,
-    Eau
+    Eau,
+    Contenant
 }
