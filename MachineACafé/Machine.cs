@@ -10,7 +10,8 @@ public class Machine
     public int CafésServis { get; private set; }
     public int SommeEnCaisse { get; private set; }
     public bool MugDétecté { private get; set; }
-    public int StockGobelets { get; }
+    public int StockGobelets { get; private set; }
+    public int ConsommationEau { get; private set; }
 
     public Machine(
         bool eauDisponible = true, 
@@ -34,5 +35,7 @@ public class Machine
 
         CafésServis++;
         SommeEnCaisse += sommeEnCentimes;
+        ConsommationEau = 1;
+        StockGobelets = 0;
     }
 }

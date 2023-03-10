@@ -105,7 +105,7 @@ public class MachineACaféTest
         "ETANT DONNE une machine a café manquant d'une Ressource Nécessaire " +
         "QUAND on insère une somme supérieure ou égale à 40cts " +
         "ALORS aucune Ressource Nécessaire n'est consommée " +
-        "ET la somme est rendue", Skip = "V2 TODO")]
+        "ET la somme est rendue", Skip = "Test tautologique")]
     [MemberData(nameof(CasTestPénurie))]
     public void TestPénuriesV2(Ressource ressourceNécessaireManquante)
     {
@@ -115,6 +115,8 @@ public class MachineACaféTest
             .Build();
 
         var cafésServisInitiaux = machine.CafésServis;
+        var gobeletsInitiaux = machine.StockGobelets;
+        var eauConsomméeInitiale = machine.ConsommationEau;
         var sommeEnCaisseInitiale = machine.SommeEnCaisse;
 
         // QUAND on insère une somme supérieure ou égale à 40cts
@@ -122,28 +124,30 @@ public class MachineACaféTest
         const int sommeInsérée = Machine.PrixDuCafé;
         machine.Insérer(sommeInsérée);
 
-        // ALORS aucun café n'est servi
+        // ALORS aucune Ressource Nécessaire n'est consommée
         Assert.Equal(cafésServisInitiaux, machine.CafésServis);
+        Assert.Equal(gobeletsInitiaux, machine.StockGobelets);
+        Assert.Equal(eauConsomméeInitiale, machine.ConsommationEau);
 
         // ET la somme est rendue
         Assert.Equal(sommeEnCaisseInitiale, machine.SommeEnCaisse);
     }
 
-    [Theory(DisplayName =
+    [Fact(DisplayName =
         "ETANT DONNE une machine a café" +
         "QUAND on insère une somme supérieure ou égale à 40cts " +
         "ALORS une unité de chaque Ressource Nécessaire est consommée " +
-        "ET la somme est rendue", Skip = "V2 TODO")]
-    [MemberData(nameof(CasTestPénurie))]
-    public void TestNominalV2(Ressource ressourceNécessaireManquante)
+        "ET la somme est encaissée")]
+    public void TestNominalV2()
     {
-        // ETANT DONNE une machine a café manquant d'une Ressource Nécessaire
+        // ETANT DONNE une machine a café
         var machine = new MachineBuilder()
-            .AyantUnManque(ressourceNécessaireManquante)
             .Build();
 
         var cafésServisInitiaux = machine.CafésServis;
         var sommeEnCaisseInitiale = machine.SommeEnCaisse;
+        var gobeletsInitiaux = machine.StockGobelets;
+        var eauConsomméeInitiale = machine.ConsommationEau;
 
         // QUAND on insère une somme supérieure ou égale à 40cts
         // (40cts est une vérification jugée suffisante pour ce test)
@@ -151,9 +155,11 @@ public class MachineACaféTest
         machine.Insérer(sommeInsérée);
 
         // ALORS aucun café n'est servi
-        Assert.Equal(cafésServisInitiaux, machine.CafésServis);
+        Assert.Equal(cafésServisInitiaux + 1, machine.CafésServis);
+        Assert.Equal(gobeletsInitiaux - 1, machine.StockGobelets);
+        Assert.Equal(eauConsomméeInitiale + 1, machine.ConsommationEau);
 
-        // ET la somme est rendue
-        Assert.Equal(sommeEnCaisseInitiale, machine.SommeEnCaisse);
+        // ET la somme est encaissée
+        Assert.Equal(sommeEnCaisseInitiale + sommeInsérée, machine.SommeEnCaisse);
     }
 }
