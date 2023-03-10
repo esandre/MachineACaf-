@@ -3,30 +3,34 @@
 public class Machine
 {
     private readonly bool _eauDisponible;
-    private readonly bool _gobeletsDisponibles;
     private readonly bool _caféDisponible;
 
     public const int PrixDuCafé = 40;
 
     public int CafésServis { get; private set; }
     public int SommeEnCaisse { get; private set; }
+    public bool MugDétecté { private get; set; }
+    public int StockGobelets { get; }
 
     public Machine(
         bool eauDisponible = true, 
-        bool gobeletsDisponibles = true,
+        int stockGobelets = 1,
         bool caféDisponible = true)
     {
         _eauDisponible = eauDisponible;
-        _gobeletsDisponibles = gobeletsDisponibles;
         _caféDisponible = caféDisponible;
+        StockGobelets = stockGobelets;
     }
 
     public void Insérer(int sommeEnCentimes)
     {
-        if(!_eauDisponible) return;
-        if(!_gobeletsDisponibles) return;
-        if(!_caféDisponible) return;
-        if (sommeEnCentimes < PrixDuCafé) return;
+        if(!MugDétecté)
+        {
+            if (!_eauDisponible) return;
+            if (StockGobelets == 0) return;
+            if (!_caféDisponible) return;
+            if (sommeEnCentimes < PrixDuCafé) return;
+        }
 
         CafésServis++;
         SommeEnCaisse += sommeEnCentimes;
