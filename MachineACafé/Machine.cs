@@ -3,32 +3,37 @@
 public class Machine
 {
     private readonly bool _eauDisponible;
-    private readonly bool _gobeletsDisponibles;
     private readonly bool _caféDisponible;
+
+    private RelevésStocksEtConsommations _étatActuel;
 
     public const int PrixDuCafé = 40;
 
-    public int CafésServis { get; private set; }
     public int SommeEnCaisse { get; private set; }
+    public bool MugDétecté { private get; set; }
 
     public Machine(
         bool eauDisponible = true, 
-        bool gobeletsDisponibles = true,
+        int stockGobelets = 1,
         bool caféDisponible = true)
     {
         _eauDisponible = eauDisponible;
-        _gobeletsDisponibles = gobeletsDisponibles;
         _caféDisponible = caféDisponible;
+
+        _étatActuel = new RelevésStocksEtConsommations(0, stockGobelets, 0);
     }
+
+    private bool PossèdeUnContenant => MugDétecté || _étatActuel.AuMoinsUnGobelet();
+    private bool PeutTechniquementServirUnCafé => PossèdeUnContenant && _caféDisponible && _eauDisponible;
+    private bool PeutServirUnCafé(int sommeInsérée) => PeutTechniquementServirUnCafé && sommeInsérée >= PrixDuCafé;
 
     public void Insérer(int sommeEnCentimes)
     {
-        if(!_eauDisponible) return;
-        if(!_gobeletsDisponibles) return;
-        if(!_caféDisponible) return;
-        if (sommeEnCentimes < PrixDuCafé) return;
+        if (!PeutServirUnCafé(sommeEnCentimes)) return;
 
-        CafésServis++;
         SommeEnCaisse += sommeEnCentimes;
+        _étatActuel = _étatActuel.MoinsUnCafé(MugDétecté);
     }
+
+    public RelevésStocksEtConsommations ObtenirRelevéStocksConsommations() => _étatActuel;
 }
