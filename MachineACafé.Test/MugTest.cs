@@ -1,5 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-using MachineACafé.Test.Utiities;
+﻿using MachineACafé.Test.Utiities;
 using NFluent;
 
 namespace MachineACafé.Test;
@@ -32,6 +31,33 @@ public class MugTest
         // ET la somme est encaissée
         Check.That(machine).UnCaféServi(etatInitial)
             .And.PrixDUnCaféEncaissé(sommeEnCaisseInitiale);
+    }
+
+    public static IEnumerable<object[]> CasPasDeMugFraudeurTest
+        => new CartesianData(PrimitivesCartésiennes.SommesStrictementInférieuresAuPrixDuCafé);
+
+    [Theory(DisplayName = "ETANT DONNE une machine a café détectant un mug " +
+                          "QUAND on met une somme supérieure ou égale à 40cts" +
+                          "ALORS aucun café n'est servi" +
+                          "ET la somme est restituée")]
+    [MemberData(nameof(CasPasDeMugFraudeurTest))]
+    public void PasDeMugFraudeurTest(int sommeInsérée)
+    {
+        // ETANT DONNE une machine a café détectant un mug
+        var machine = new MachineBuilder()
+            .DétectantUnMug()
+            .Build();
+
+        var etatInitial = machine.ObtenirRelevéStocksConsommations();
+        var sommeEnCaisseInitiale = machine.SommeEnCaisse;
+
+        // QUAND on met une somme strictement inférieure à 40cts
+        machine.Insérer(sommeInsérée);
+
+        // ALORS aucun café n'est servi
+        // ET la somme est restituée
+        Check.That(machine).AucunCaféServi(etatInitial)
+            .And.ArgentRendu(sommeEnCaisseInitiale);
     }
 
     public static IEnumerable<object[]> CasPasDeMugMagiqueTest 

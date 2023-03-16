@@ -23,17 +23,14 @@ public class Machine
         _étatActuel = new RelevésStocksEtConsommations(0, stockGobelets, 0);
     }
 
+    private bool PossèdeUnContenant => MugDétecté || _étatActuel.AuMoinsUnGobelet();
+    private bool PeutTechniquementServirUnCafé => PossèdeUnContenant && _caféDisponible && _eauDisponible;
+    private bool PeutServirUnCafé(int sommeInsérée) => PeutTechniquementServirUnCafé && sommeInsérée >= PrixDuCafé;
+
     public void Insérer(int sommeEnCentimes)
     {
-        if (!_eauDisponible) return;
-        if (!_caféDisponible) return;
+        if (!PeutServirUnCafé(sommeEnCentimes)) return;
 
-        if(!MugDétecté)
-        {
-            if (!_étatActuel.AuMoinsUnGobelet()) return;
-            if (sommeEnCentimes < PrixDuCafé) return;
-        }
-        
         SommeEnCaisse += sommeEnCentimes;
         _étatActuel = _étatActuel.MoinsUnCafé(MugDétecté);
     }

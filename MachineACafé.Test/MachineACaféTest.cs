@@ -10,11 +10,8 @@ public class MachineACaféTest
     private static IEnumerable<int> SommesSupérieuresOuEgalesAuPrixDuCafé 
         => new[] { Machine.PrixDuCafé, Machine.PrixDuCafé + 1, Random.Next(Machine.PrixDuCafé + 2, int.MaxValue) };
 
-    private static IEnumerable<int> SommesStrictementInférieuresAuPrixDuCafé
-        => new[] { Machine.PrixDuCafé - 1, 1, Random.Next(2, Machine.PrixDuCafé - 2) };
-
     public static IEnumerable<object[]> CasTestPasAssezArgent
-        => SommesStrictementInférieuresAuPrixDuCafé
+        => PrimitivesCartésiennes.SommesStrictementInférieuresAuPrixDuCafé
             .Select(somme => new object[] { somme });
 
     [Theory(DisplayName =
