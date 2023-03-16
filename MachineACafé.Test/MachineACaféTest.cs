@@ -13,9 +13,6 @@ public class MachineACaféTest
     private static IEnumerable<int> SommesStrictementInférieuresAuPrixDuCafé
         => new[] { Machine.PrixDuCafé - 1, 1, Random.Next(2, Machine.PrixDuCafé - 2) };
 
-    private static IEnumerable<Ressource> RessourcesNécessaires 
-        => new[] { Ressource.Café, Ressource.Eau, Ressource.Gobelet };
-
     public static IEnumerable<object[]> CasTestPasAssezArgent
         => SommesStrictementInférieuresAuPrixDuCafé
             .Select(somme => new object[] { somme });
@@ -44,8 +41,7 @@ public class MachineACaféTest
     }
 
     public static IEnumerable<object[]> CasTestPénurie
-        => RessourcesNécessaires
-            .Select(ressource => new object[] { ressource });
+        => new CartesianData(PrimitivesCartésiennes.RessourcesNécessaires);
 
     [Theory(DisplayName =
         "ETANT DONNE une machine a café manquant d'une Ressource Nécessaire " +
@@ -100,7 +96,7 @@ public class MachineACaféTest
         // ALORS une unité de chaque Ressource Nécessaire est consommée
         // ET la somme est encaissée
         Check.That(machine)
-            .ConsommeUnDeChaque(etatInitial, RessourcesNécessaires.ToArray())
+            .ConsommeUnDeChaque(etatInitial, PrimitivesCartésiennes.RessourcesNécessaires.ToArray())
             .And.SommeEncaissée(sommeEnCaisseInitiale, sommeEnCentimes);
     }
 }

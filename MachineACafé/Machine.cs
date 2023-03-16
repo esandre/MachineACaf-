@@ -25,11 +25,12 @@ public class Machine
 
     public void Insérer(int sommeEnCentimes)
     {
+        if (!_eauDisponible) return;
+        if (!_caféDisponible) return;
+
         if(!MugDétecté)
         {
-            if (!_eauDisponible) return;
             if (!_étatActuel.AuMoinsUnGobelet()) return;
-            if (!_caféDisponible) return;
             if (sommeEnCentimes < PrixDuCafé) return;
         }
         
