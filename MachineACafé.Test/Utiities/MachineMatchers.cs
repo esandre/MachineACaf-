@@ -31,7 +31,7 @@ internal static class MachineMatchers
         );
     }
 
-    public static ICheckLink<ICheck<Machine>> ConsommeUn(
+    private static ICheckLink<ICheck<Machine>> ConsommeUn(
         this ICheck<Machine> check,
         RelevésStocksEtConsommations étatInitial,
         Ressource ressource)
@@ -89,7 +89,7 @@ internal static class MachineMatchers
             $"{différentiel.CafésServis} cafés ont été servis alors que cela ne devrait pas être le cas.");
     }
 
-    public static ICheckLink<ICheck<Machine>> UnGobeletConsommé(
+    private static ICheckLink<ICheck<Machine>> UnGobeletConsommé(
         this ICheck<Machine> check,
         RelevésStocksEtConsommations étatInitial)
     {
@@ -125,7 +125,7 @@ internal static class MachineMatchers
             $"{différentiel.StockGobelets} gobelets ont été consommés alors que cela ne devrait pas être le cas.");
     }
 
-    public static ICheckLink<ICheck<Machine>> UnVolumeDEauConsommé(
+    private static ICheckLink<ICheck<Machine>> UnVolumeDEauConsommé(
         this ICheck<Machine> check,
         RelevésStocksEtConsommations étatInitial)
     {

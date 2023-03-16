@@ -29,7 +29,7 @@ internal class CartesianData : IEnumerable<object[]>
     {
         var combinaisons = InlineData
             .First()
-            .Select(value => new object[] { value })
+            .Select(value => new [] { value })
             .ToArray();
 
         foreach (var paramètreSupplémentaire in InlineData.Skip(1))
